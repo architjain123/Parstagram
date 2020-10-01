@@ -15,23 +15,62 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var tableView: UITableView!
     
     var posts = [PFObject]()
+    var numberOfPosts: Int!
+    let postsRefreshControl = UIRefreshControl()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.estimatedRowHeight = 410
+        postsRefreshControl.addTarget(self, action: #selector(loadPosts), for: .valueChanged)
+        self.tableView.refreshControl = postsRefreshControl
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+        super.viewDidAppear(animated)
+        loadPosts()
+    }
+    
+    @objc func loadPosts(){
+        numberOfPosts = 20
         let query = PFQuery(className:"Posts")
         query.includeKey("author")
-        query.limit = 10
+        query.limit = numberOfPosts
         query.findObjectsInBackground { (posts, error) in
             if posts != nil{
                 self.posts = posts!
                 self.tableView.reloadData()
+                self.postsRefreshControl.endRefreshing()
+                print(self.numberOfPosts)
             }
+            else{
+                print("Error: \(error)")
+            }
+        }
+    }
+    
+    func loadMorePosts(){
+        numberOfPosts = numberOfPosts + 20
+        let query = PFQuery(className:"Posts")
+        query.includeKey("author")
+        query.limit = numberOfPosts
+        query.findObjectsInBackground { (posts, error) in
+            if posts != nil{
+                self.posts = posts!
+                self.tableView.reloadData()
+                print(self.numberOfPosts)
+            }
+            else{
+                print("Error: \(error)")
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row + 1 == self.posts.count{
+            loadMorePosts()
         }
     }
     
@@ -53,19 +92,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         let url = URL(string: urlString)!
         cell.photoView.af.setImage(withURL: url)
         
-        
         return cell
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
