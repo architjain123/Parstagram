@@ -119,8 +119,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="410"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LIH-JO-x9I">
-                                                    <rect key="frame" x="20" y="11" width="374" height="350"/>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="timelapse" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="LIH-JO-x9I">
+                                                    <rect key="frame" x="20" y="10.5" width="374" height="351"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="350" id="TBt-wG-Zjd"/>
                                                     </constraints>
@@ -268,5 +268,6 @@
         <image name="image_placeholder" width="375" height="375"/>
         <image name="insta_camera_btn" width="25" height="25"/>
         <image name="instagram_logo" width="255" height="108"/>
+        <image name="timelapse" catalog="system" width="128" height="122"/>
     </resources>
 </document>
