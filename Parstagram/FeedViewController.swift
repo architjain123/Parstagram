@@ -86,7 +86,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     @objc func loadPosts(){
         numberOfPosts = 20
         let query = PFQuery(className:"Posts")
-        query.includeKeys(["author", "comments", "comments.author"])
+        query.includeKeys(["author", "comments", "comments.author", "comment.author.image"])
         query.limit = numberOfPosts
         query.order(byDescending: "updatedAt")
         query.findObjectsInBackground { (posts, error) in
@@ -94,10 +94,10 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.posts = posts!
                 self.tableView.reloadData()
                 self.postsRefreshControl.endRefreshing()
-                print(self.numberOfPosts)
+                print(self.numberOfPosts as Any)
             }
             else{
-                print("Error: \(error)")
+                print("Error: \(String(describing: error))")
             }
         }
     }
@@ -112,10 +112,10 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             if posts != nil{
                 self.posts = posts!
                 self.tableView.reloadData()
-                print(self.numberOfPosts)
+                print(self.numberOfPosts as Any)
             }
             else{
-                print("Error: \(error)")
+                print("Error: \(String(describing: error))")
             }
         }
     }
@@ -150,7 +150,12 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             let urlString = imageFile.url!
             let url = URL(string: urlString)!
             cell.photoView.af.setImage(withURL: url)
-            
+            if user["image"] != nil {
+                let imageFile = user["image"] as! PFFileObject
+                let urlString = imageFile.url!
+                let url = URL(string: urlString)!
+                cell.profileImageView.af.setImage(withURL: url)
+            }
             return cell
         }
         else if indexPath.row <= comments.count {
@@ -159,7 +164,12 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.commentLabel.text = comment["text"] as? String
             let user = comment["author"] as! PFUser
             cell.nameLabel.text = user.username
-            
+            if user["image"] != nil {
+                let imageFile = user["image"] as! PFFileObject
+                let urlString = imageFile.url!
+                let url = URL(string: urlString)!
+                cell.profileImageView.af.setImage(withURL: url)
+            }
             return cell
         }
         else {

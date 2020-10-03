@@ -11,12 +11,14 @@ import UIKit
 class PostCell: UITableViewCell {
 
     @IBOutlet weak var photoView: UIImageView!
+    @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var captionLabel: UILabel!
-    
+        
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        profileImageView.layer.masksToBounds = true
+        profileImageView.layer.cornerRadius = profileImageView.bounds.width / 2
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
